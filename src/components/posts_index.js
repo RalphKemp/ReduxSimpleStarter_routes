@@ -14,7 +14,7 @@ renderPosts() {
   return _.map(this.props.posts, post => {
     return (
       <li className="list-group-item" key={post.id}>
-        {post.title} : {post.content}
+        {post.title}
       </li>
       );
   });
