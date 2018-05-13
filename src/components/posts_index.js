@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchPosts } from '../actions';
+import { fetchPosts, deletePost } from '../actions';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 
@@ -9,6 +9,14 @@ class PostsIndex extends Component {
     this.props.fetchPosts();
   }
 
+onDeleteClick() {
+  const id = this.props.posts.find(function(post) {
+    return post.id;
+  });
+  this.props.deletePost(id, () => {
+    this.props.history.push('/'); // this is being passed as the second argument to deletePost (action creator)
+  });
+}
 
 renderPosts() {
   return _.map(this.props.posts, post => {
@@ -17,6 +25,12 @@ renderPosts() {
         <Link to={`/posts/${post.id}`}>
           {post.title}
         </Link>
+        <button
+          className="btn btn-danger pull-xs-right"
+          onClick={this.onDeleteClick.bind(this)}
+        >
+        Delete Post
+        </button>
       </li>
       );
   });
@@ -43,4 +57,4 @@ function mapStateToProps(state) {
   return { posts: state.posts};
 }
 
-export default connect(mapStateToProps, { fetchPosts })(PostsIndex);
+export default connect(mapStateToProps, { fetchPosts, deletePost })(PostsIndex);
